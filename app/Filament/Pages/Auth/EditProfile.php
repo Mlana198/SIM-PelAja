@@ -2,30 +2,19 @@
 
 namespace App\Filament\Pages\Auth;
 
+use Filament\Auth\Pages\EditProfile as BaseEditProfile;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Pages\Page as BaseEditProfile;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Schemas\Schema;
 
-class EditProfile extends BaseEditProfile implements HasForms
+class EditProfile extends BaseEditProfile
 {
-    use InteractsWithForms;
-
-    protected string $view = 'filament.pages.auth.edit-profile';
-
-    public static function shouldRegisterNavigation(): bool
+    public function form(Schema $schema): Schema
     {
-        return false;
-    }
-
-    protected function form(Form $form): Form
-    {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('email')
                     ->email()
                     ->required()
@@ -34,8 +23,8 @@ class EditProfile extends BaseEditProfile implements HasForms
                 TextInput::make('password')
                     ->password()
                     ->maxLength(255)
-                    ->dehydrateStateUsing(fn($state) => filled($state) ? bcrypt($state) : null)
-                    ->dehydrated(fn($state) => filled($state))
+                    ->dehydrateStateUsing(fn ($state) => filled($state) ? bcrypt($state) : null)
+                    ->dehydrated(fn ($state) => filled($state))
                     ->placeholder('Kosongkan jika tidak ingin mengubah password'),
 
                 TextInput::make('profil.nama_lengkap')
